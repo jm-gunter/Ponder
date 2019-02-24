@@ -4,13 +4,18 @@ using Microsoft.Extensions.Configuration;
 
 namespace Ponder.Tests
 {
+    /// <summary>
+    /// Stub IConfiguration implementation for testing
+    /// </summary>
     public class TestConfiguration : IConfiguration
     {
+        private Dictionary<string, string> _config;
         public TestConfiguration()
         {
+            _config = new Dictionary<string, string>();
         }
 
-        public string this[string key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string this[string key]{ get => _config[key]; set => _config[key] = value; }
 
         public IEnumerable<IConfigurationSection> GetChildren()
         {

@@ -3,40 +3,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Ponder.Models;
+using Ponder.Data;
 
 namespace Ponder.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class GamesController : ControllerBase
     {
-        // GET api/values
+        private readonly IDataContext<Game> _context;
+
+        public GamesController(IDataContext<Game> context)
+        {
+            _context = context;
+        }
+
+        // GET api/games
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new JsonResult(await _context.ReadAsync());
         }
 
-        // GET api/values/5
+        // GET api/games/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
-            return "value";
+            return new JsonResult(await _context.ReadAsync()); // TODO add id after MongoContext is complete
         }
 
-        // POST api/values
+        // POST api/games
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task Post([FromBody] Game game)
         {
+            await _context.CreateAsync(game);
         }
 
-        // PUT api/values/5
+        // PUT api/games/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/values/5
+        // DELETE api/games/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

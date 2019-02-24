@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Ponder.Data
@@ -7,7 +8,9 @@ namespace Ponder.Data
     {
         Task CreateAsync(T record);
 
-        Task<T> ReadAsync();
+        Task<IEnumerable<T>> ReadAsync();
+
+        Task<IEnumerable<T>> ReadAsync(string filter);
 
         Task<T> UpdateAsync();
 
