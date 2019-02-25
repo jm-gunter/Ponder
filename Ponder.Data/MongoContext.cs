@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Ponder.Common;
 
@@ -54,27 +56,27 @@ namespace Ponder.Data
         /// Returns a list of records matching the specified filter
         /// </summary>
         /// <returns>IEnumerable<typeparamref name="T"/>></returns>
-        /// <param name="filter">a valid MongoDB query string</param>
-        public async Task<IEnumerable<T>> ReadAsync(string filter)
+        /// <param name="filter">a Linq expression to filter by</param>
+        public async Task<IEnumerable<T>> ReadAsync(Expression<Func<T, bool>> filter)
         {
-            var cursor = await _collection.FindAsync(filter);
+            var cursor = await _collection.FindAsync<T>(filter);
             return cursor.ToList();
         }
         #endregion
 
         #region UPDATE
-        public async Task<T> UpdateAsync()
+        public async Task<T> UpdateAsync(Expression<Func<T, bool>> filter, T obj)
         {
-            throw new NotImplementedException();
-
-            //return await _collection.UpdateOneAsync(filter, update, options, cancellationToken);
+            var result = await _collection.ReplaceOneAsync(filter, obj);
+            var bson = result.ToBsonDocument();
+            return BsonSerializer.Deserialize<T>(bson);
         }
         #endregion
 
         #region DELETE
-        public async Task<T> DeleteAsync()
+        public async Task DeleteAsync(Expression<Func<T, bool>> filter)
         {
-            throw new NotImplementedException();
+            await _collection.DeleteManyAsync(filter);
         }
         #endregion
     }

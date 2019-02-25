@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Ponder.Data
@@ -10,10 +11,10 @@ namespace Ponder.Data
 
         Task<IEnumerable<T>> ReadAsync();
 
-        Task<IEnumerable<T>> ReadAsync(string filter);
+        Task<IEnumerable<T>> ReadAsync(Expression<Func<T, bool>> filter);
 
-        Task<T> UpdateAsync();
+        Task<T> UpdateAsync(Expression<Func<T, bool>> filter, T obj);
 
-        Task<T> DeleteAsync();
+        Task DeleteAsync(Expression<Func<T, bool>> filter);
     }
 }
