@@ -8,6 +8,6 @@ namespace Ponder.Models
 
         }
 
-        public string _id { get; } = new Guid().ToString();
+        public string _id { get; set; }
     }
 }

@@ -28,28 +28,54 @@ namespace Ponder.Api.Controllers
 
         // GET api/games/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult> Get(string id)
         {
-            return new JsonResult(await _context.ReadAsync()); // TODO add id after MongoContext is complete
+            return new JsonResult(await _context.ReadAsync(g => g._id == id));
         }
 
         // POST api/games
         [HttpPost]
-        public async Task Post([FromBody] Game game)
+        public async Task<IActionResult> Post([FromBody] Game game)
         {
-            await _context.CreateAsync(game);
+            try
+            {
+                await _context.CreateAsync(game);
+            }
+            catch
+            {
+                return new StatusCodeResult(500);
+            }
+            return new OkResult();
         }
 
         // PUT api/games/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(string id, [FromBody] Game game)
         {
+            try
+            {
+                await _context.UpdateAsync(g => g._id == id, game);
+            }
+            catch
+            {
+                return new StatusCodeResult(500);
+            }
+            return new OkResult();
         }
 
         // DELETE api/games/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
+            try
+            {
+                await _context.DeleteAsync(g => g._id == id);
+            }
+            catch
+            {
+                return new StatusCodeResult(500);
+            }
+            return new OkResult();
         }
     }
 }
