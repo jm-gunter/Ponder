@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ponder.Models;
 using Ponder.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace Ponder.Api.Controllers
 {
@@ -23,14 +24,34 @@ namespace Ponder.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return new JsonResult(await _context.ReadAsync());
+            IEnumerable<Game> result;
+            try
+            {
+                result = await _context.ReadAsync();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new PonderResult(e.Message));
+            }
+
+            return Ok(result);
         }
 
         // GET api/games/5
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(string id)
         {
-            return new JsonResult(await _context.ReadAsync(g => g._id == id));
+            IEnumerable<Game> result;
+            try
+            {
+                result = await _context.ReadAsync(g => g._id == id);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new PonderResult(e.Message));
+            }
+
+            return Ok(result);
         }
 
         // POST api/games
@@ -41,11 +62,12 @@ namespace Ponder.Api.Controllers
             {
                 await _context.CreateAsync(game);
             }
-            catch
+            catch (Exception e)
             {
-                return new StatusCodeResult(500);
+                return StatusCode(500, new PonderResult(e.Message));
             }
-            return new OkResult();
+
+            return Ok(game);
         }
 
         // PUT api/games/5
@@ -56,11 +78,12 @@ namespace Ponder.Api.Controllers
             {
                 await _context.UpdateAsync(g => g._id == id, game);
             }
-            catch
+            catch (Exception e)
             {
-                return new StatusCodeResult(500);
+                return StatusCode(500, new PonderResult(e.Message));
             }
-            return new OkResult();
+
+            return Ok(game);
         }
 
         // DELETE api/games/5
@@ -71,11 +94,12 @@ namespace Ponder.Api.Controllers
             {
                 await _context.DeleteAsync(g => g._id == id);
             }
-            catch
+            catch (Exception e)
             {
-                return new StatusCodeResult(500);
+                return StatusCode(500, new PonderResult(e.Message));
             }
-            return new OkResult();
+
+            return Ok(new PonderResult($"Successfully deleted game (id = {id})"));
         }
     }
 }
