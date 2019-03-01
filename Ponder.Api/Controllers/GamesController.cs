@@ -44,7 +44,7 @@ namespace Ponder.Api.Controllers
             IEnumerable<Game> result;
             try
             {
-                result = await _context.ReadAsync(g => g._id == id);
+                result = await _context.ReadAsync(g => g.Id == id);
             }
             catch (Exception e)
             {
@@ -76,7 +76,7 @@ namespace Ponder.Api.Controllers
         {
             try
             {
-                await _context.UpdateAsync(g => g._id == id, game);
+                await _context.UpdateAsync(g => g.Id == id, game);
             }
             catch (Exception e)
             {
@@ -92,7 +92,7 @@ namespace Ponder.Api.Controllers
         {
             try
             {
-                await _context.DeleteAsync(g => g._id == id);
+                await _context.DeleteAsync(g => g.Id == id);
             }
             catch (Exception e)
             {

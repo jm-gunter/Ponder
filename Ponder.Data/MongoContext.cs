@@ -11,6 +11,10 @@ using Ponder.Common;
 
 namespace Ponder.Data
 {
+    /// <summary>
+    /// Provides CRUD operations for Mongo DB using mongo csharp driver
+    /// http://mongodb.github.io/mongo-csharp-driver/2.7/
+    /// </summary>
     public class MongoContext<T> : IDataContext<T>
     {
         private readonly IMongoCollection<T> _collection;
