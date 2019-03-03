@@ -1,0 +1,25 @@
+﻿@page
+@model GameDetailModel
+@{
+    ViewData["Title"] = "Game Details";
+}
+
+<h1>@(string.IsNullOrWhiteSpace(Model.Game.Name) ? Model.Game.Name : "New Game")  Details</h1>
+
+<form asp-action="GameDetail" method="post">
+    <div>
+        <label asp-for="@Model.Game.Name"></label>
+        <input asp-for="@Model.Game.Name" />
+        <span asp-validation-for="@Model.Game.Name"></span>
+    </div>
+
+    <div>
+        <label asp-for="@Model.Game.Date"></label>
+        <input asp-for="@Model.Game.Date" />
+        <span asp-validation-for="@Model.Game.Date"></span>
+    </div>
+
+    <div>
+        <input type="submit" value="Save" />
+    </div>
+</form>

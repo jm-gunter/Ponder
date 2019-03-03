@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,6 +32,14 @@ namespace Ponder.Api
 
             // Register dependencies
             services.AddScoped<IDataContext<Game>, MongoContext<Game>>();
+
+            // Use Jwt Authentication
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                //.AddJwtBearer(options =>
+                //{
+                //    options.Authority = "{yourAuthorizationServerAddress}";
+                //    options.Audience = "{yourAudience}";
+                //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +55,7 @@ namespace Ponder.Api
             }
 
             app.UseHttpsRedirection();
+            //app.UseAuthentication();
             app.UseMvc();
         }
     }
