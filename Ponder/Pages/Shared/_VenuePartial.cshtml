@@ -1,0 +1,17 @@
+﻿@model Venue
+@{
+}
+<h3>@Model.Name</h3>
+<div class="form-group">
+    <label asp-for="@Model.Name"></label>
+    <input asp-for="@Model.Name" />
+    <span asp-validation-for="@Model.Name"></span>
+</div>
+<div>
+    <p>@Model.Address.City, @Model.Address.State, @Model.Address.Country, @Model.Address.PostalCode</p>
+</div>
+
+<div>
+    <p>@Model.Contact.Name, @Model.Contact.Email</p>
+</div>
+
